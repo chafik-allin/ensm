@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index()
     {
-        //
+        $menu = \App\Menu::parents();
+
+        return view('menu.index')->withMenu($menu);
     }
 
     /**
@@ -34,7 +33,13 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, 
+        [
+            'name'  =>  'required'
+        ]);
+
+        \App\Menu::create($request->all());
+        return redirect()->back()->withSuccess('Item créé avec success');
     }
 
     /**
@@ -68,7 +73,9 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $item = \App\Menu::findOrFail($id);
+        $item->update($request->all());
+        return redirect()->back()->withSuccess('Item modifié avec success');
     }
 
     /**
@@ -79,6 +86,8 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = \App\Menu::findOrFail($id);
+        $item->delete();
+        return  redirect()->back()->withSuccess('Item supprimé avec success');
     }
 }
