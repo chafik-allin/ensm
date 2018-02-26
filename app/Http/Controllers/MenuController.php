@@ -12,7 +12,7 @@ class MenuController extends Controller
     {
         $menu = \App\Menu::parents();
 
-        return view('menu.index')->withMenu($menu);
+        return view('admin.menu')->withMenu($menu);
     }
 
     /**
@@ -33,12 +33,18 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
+
+//        dd($request->all());
         $this->validate($request, 
         [
             'name'  =>  'required'
         ]);
 
-        \App\Menu::create($request->all());
+        $item = \App\Menu::where('name', $request->name)->first();
+//        dd($item);
+        if($item == null)
+            \App\Menu::create($request->all());
+        
         return redirect()->back()->withSuccess('Item créé avec success');
     }
 

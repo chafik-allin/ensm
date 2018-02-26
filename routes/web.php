@@ -28,3 +28,7 @@ Route::resource('posts', 'PostsController');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::get('/admin', ['uses' => 'PagesController@admin', 'as'=>'admin.index']);
+Route::get('/admin/formations',['uses'=>'TrainingsController@admin', 'as'=>'admin.trainings']);

@@ -31,4 +31,8 @@ class PagesController extends Controller
 	public function partenariats(){
 		return view('pages.partenariats');
 	}
+
+	public function admin(){
+		return view('admin.index');
+	}
 }

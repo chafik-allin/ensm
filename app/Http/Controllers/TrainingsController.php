@@ -13,7 +13,8 @@ class TrainingsController extends Controller
      */
     public function index()
     {
-        //
+        $trainings = \App\Training::paginate(10);
+        return view('trainings.index')->withTrainings($trainings);
     }
 
     /**
@@ -23,7 +24,7 @@ class TrainingsController extends Controller
      */
     public function create()
     {
-        //
+        return view('trainings.create');
     }
 
     /**
@@ -34,7 +35,9 @@ class TrainingsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request['slug'] = str_slug($request->name);
+        \App\Training::create($request->all());
+        return redirect()->back()->withSuccess('Formation ajouté avec success');
     }
 
     /**
@@ -43,9 +46,10 @@ class TrainingsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $training = \App\Training::where('slug', $slug)->firstOrFail();
+        return view('trainings.show')->withTraining($training);
     }
 
     /**
@@ -56,7 +60,8 @@ class TrainingsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $training = \App\Training::findOrFail($id);
+        return view('trainings.edit')->withTraining($training);
     }
 
     /**
@@ -68,7 +73,9 @@ class TrainingsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $training = \App\Training::findOrFail($id);
+        $training->update($request->all());
+        return redirect()->back()->withSuccess('La formation '.$training->name.' a été modifié avec success!');
     }
 
     /**
@@ -79,6 +86,13 @@ class TrainingsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $training = \App\Training::findOrFail($id);
+        $training->delete();
+        return redirect()->back()->withSuccess('Formation supprimée avec success');
+    }
+
+    public function admin(){
+        $trainings = \App\Training::paginate(10);
+        return view('admin.trainings')->withTrainings($trainings);
     }
 }
